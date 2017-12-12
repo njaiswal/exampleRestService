@@ -1,0 +1,44 @@
+<div>
+    <a href="" class="btn btn-primary" ng-click="fetchMarvelCharacters()">Get Marvel Characters</a>
+</div>
+
+<hr/>
+
+<div class="col-md-2" ng-show="characterIds.length != 0">
+    <label>Select ID: </label><br>
+    <select name="singleSelect" ng-model="selectedId"
+            ng-change="fetchSelectedMarvelCharacter(); selectedCharacterPowers = null;">
+        <option ng-repeat="option in characterIds" value="{{option}}">{{option}}</option>
+    </select>
+</div>
+
+<div class="col-sm-6 col-md-4" ng-show="characterInfo != null">
+    <div class="thumbnail">
+        <img ng-src="{{makeImgUrl()}}">
+        <div class="caption">
+            <h3>{{characterInfo.name}}</h3>
+            <p>{{characterInfo.description}}</p>
+            <a href="" class="btn btn-default" ng-click="fetchMarvelCharactersPower()">Get Powers</a>
+            <select name="langSelect" ng-model="selectedLang" ng-change="fetchMarvelCharactersPower();"
+                    class="col-sm-6">
+                <option ng-repeat="lang in languages" value="{{lang.code}}">{{lang.name}}</option>
+            </select>
+            <p>{{selectedCharacterPowers.powers}}</p>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row>">
+        <pre ng-show="characterInfo != null">
+{{characterInfo | json}}
+        </pre>
+    </div>
+    <div class="row>">
+        <pre ng-show="selectedCharacterPowers != null">
+{{ selectedCharacterPowers | json }}
+        </pre>
+    </div>
+</div>

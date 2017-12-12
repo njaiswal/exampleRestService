@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.nj"/>
+    <context:property-placeholder location="file:${env_config_path}/app.properties"/>
+
+
+    <bean id="marvelService" class="com.nj.service.MarvelService"/>
+    <bean id="dbInitializerProcessor" class="com.nj.processors.DBInitializerProcessor"/>
+    <bean id="restClient" class="com.nj.rest.MarvelRestClient"/>
+    <bean id="wikiClient" class="com.nj.wiki.MarvelWikiServiceImpl"/>
+    <bean id="translateService" class="com.nj.translate.GoogleTranslateService"/>
+
+
+    <bean id="characterDAO" class="com.nj.db.CharacterInMemoryDAOImpl"/>
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route id="dbInitializer">
+            <from uri="timer://initializeDB?repeatCount=1&amp;delay=-1"/>
+            <log message="Starting to populate DB....."/>
+            <to uri="bean:dbInitializerProcessor"/>
+            <log message="DB population finished....."/>
+        </route>
+    </camelContext>
+
+</beans>
